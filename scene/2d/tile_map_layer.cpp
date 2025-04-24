@@ -705,9 +705,11 @@ void TileMapLayer::_physics_update(bool p_force_cleanup) {
 	// Check if we should cleanup everything.
 	bool forced_cleanup = p_force_cleanup || !enabled || !collision_enabled || !is_inside_tree() || tile_set.is_null();
 	if (forced_cleanup) {
-		// Clean everything.
-		for (KeyValue<Vector2i, CellData> &kv : tile_map_layer_data) {
-			_physics_clear_cell(kv.value);
+		if (collision_enabled) {
+			// Clean everything.
+			for (KeyValue<Vector2i, CellData> &kv : tile_map_layer_data) {
+				_physics_clear_cell(kv.value);
+			}
 		}
 	} else {
 		if (_physics_was_cleaned_up || dirty.flags[DIRTY_FLAGS_TILE_SET] || dirty.flags[DIRTY_FLAGS_LAYER_USE_KINEMATIC_BODIES] || dirty.flags[DIRTY_FLAGS_LAYER_IN_TREE]) {
